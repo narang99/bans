@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { InputPanel, OutputPanel, TransposeControls, Navbar, SongList, SongPage, NotationModal } from './components';
+import { InputPanel, OutputPanel, TransposeControls, Navbar, SongList, SongPage } from './components';
 import { genericDotsParser } from './parsers';
 import { transposeAndValidate, extractErrors, sanitizeInput, type TransposedLine } from './core';
 import './index.css';
