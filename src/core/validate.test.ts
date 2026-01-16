@@ -4,51 +4,51 @@ import { Note } from './types';
 
 describe('BANSURI_RANGE', () => {
   it('should have correct notes for low octave', () => {
-    expect(BANSURI_RANGE[-1].has(Note.Pa)).toBe(true);
-    expect(BANSURI_RANGE[-1].has(Note.Dha)).toBe(true);
-    expect(BANSURI_RANGE[-1].has(Note.Ni)).toBe(true);
-    expect(BANSURI_RANGE[-1].has(Note.Sa)).toBe(false); // Sa not in low octave
+    expect(BANSURI_RANGE[0].has(Note.Pa)).toBe(true);
+    expect(BANSURI_RANGE[0].has(Note.Dha)).toBe(true);
+    expect(BANSURI_RANGE[0].has(Note.Ni)).toBe(true);
+    expect(BANSURI_RANGE[0].has(Note.Sa)).toBe(false); // Sa not in low octave
   });
 
   it('should allow all notes in middle octave', () => {
-    expect(BANSURI_RANGE[0].size).toBe(12);
+    expect(BANSURI_RANGE[1].size).toBe(12);
   });
 
   it('should have correct notes for upper octave', () => {
-    expect(BANSURI_RANGE[1].has(Note.Sa)).toBe(true);
-    expect(BANSURI_RANGE[1].has(Note.Re)).toBe(true);
-    expect(BANSURI_RANGE[1].has(Note.Pa)).toBe(true);
-    expect(BANSURI_RANGE[1].has(Note.Dha)).toBe(false); // Dha not in upper octave
-    expect(BANSURI_RANGE[1].has(Note.Ni)).toBe(false);
+    expect(BANSURI_RANGE[2].has(Note.Sa)).toBe(true);
+    expect(BANSURI_RANGE[2].has(Note.Re)).toBe(true);
+    expect(BANSURI_RANGE[2].has(Note.Pa)).toBe(true);
+    expect(BANSURI_RANGE[2].has(Note.Dha)).toBe(false); // Dha not in upper octave
+    expect(BANSURI_RANGE[2].has(Note.Ni)).toBe(false);
   });
 });
 
 describe('validateNote', () => {
   it('should return null for valid middle octave note', () => {
-    const result = validateNote({ note: Note.Sa, octave: 0 }, 1, 'S');
+    const result = validateNote({ note: Note.Sa, octave: 1 }, 1, 'S');
     expect(result).toBeNull();
   });
 
   it('should return null for valid low octave note (Pa)', () => {
-    const result = validateNote({ note: Note.Pa, octave: -1 }, 1, 'p');
+    const result = validateNote({ note: Note.Pa, octave: 0 }, 1, 'p');
     expect(result).toBeNull();
   });
 
   it('should return error for invalid low octave note (Sa)', () => {
-    const result = validateNote({ note: Note.Sa, octave: -1 }, 1, 'S');
+    const result = validateNote({ note: Note.Sa, octave: 0 }, 1, 'S');
     expect(result).not.toBeNull();
     expect(result?.reason).toContain('not available in low octave');
   });
 
   it('should return error for invalid upper octave note (Dha)', () => {
-    const result = validateNote({ note: Note.Dha, octave: 1 }, 5, 'D');
+    const result = validateNote({ note: Note.Dha, octave: 2 }, 5, 'D');
     expect(result).not.toBeNull();
     expect(result?.reason).toContain('not available in upper octave');
     expect(result?.lineNumber).toBe(5);
   });
 
   it('should include original token in error', () => {
-    const result = validateNote({ note: Note.Ni, octave: 1 }, 3, "N'");
+    const result = validateNote({ note: Note.Ni, octave: 2 }, 3, "N'");
     expect(result?.originalToken).toBe("N'");
   });
 });
@@ -56,8 +56,8 @@ describe('validateNote', () => {
 describe('validateNotes', () => {
   it('should return empty array for all valid notes', () => {
     const notes = [
-      { note: Note.Sa, octave: 0 as const },
-      { note: Note.Pa, octave: 0 as const },
+      { note: Note.Sa, octave: 1 as const },
+      { note: Note.Pa, octave: 1 as const },
     ];
     const result = validateNotes(notes, [1, 1], ['S', 'P']);
     expect(result).toEqual([]);
@@ -65,8 +65,8 @@ describe('validateNotes', () => {
 
   it('should return errors for invalid notes', () => {
     const notes = [
-      { note: Note.Sa, octave: 0 as const },  // valid
-      { note: Note.Dha, octave: 1 as const }, // invalid - Dha not in upper octave
+      { note: Note.Sa, octave: 1 as const },  // valid
+      { note: Note.Dha, octave: 2 as const }, // invalid - Dha not in upper octave
     ];
     const result = validateNotes(notes, [1, 2], ['S', "D'"]);
     expect(result.length).toBe(1);

@@ -55,9 +55,9 @@ describe('genericDotsParser.parse', () => {
     const result = genericDotsParser.parse('p..d..n..');
     expect(result[0].type).toBe('notation');
     if (result[0].type === 'notation') {
-      expect(result[0].tokens[0].standardized).toEqual({ note: Note.Pa, octave: -1 });
-      expect(result[0].tokens[1].standardized).toEqual({ note: Note.Dha, octave: -1 });
-      expect(result[0].tokens[2].standardized).toEqual({ note: Note.Ni, octave: -1 });
+      expect(result[0].tokens[0].standardized).toEqual({ note: Note.Pa, octave: 0 });
+      expect(result[0].tokens[1].standardized).toEqual({ note: Note.Dha, octave: 0 });
+      expect(result[0].tokens[2].standardized).toEqual({ note: Note.Ni, octave: 0 });
     }
   });
 
@@ -65,9 +65,9 @@ describe('genericDotsParser.parse', () => {
     const result = genericDotsParser.parse("S'..R'..G'..");
     expect(result[0].type).toBe('notation');
     if (result[0].type === 'notation') {
-      expect(result[0].tokens[0].standardized).toEqual({ note: Note.Sa, octave: 1 });
-      expect(result[0].tokens[1].standardized).toEqual({ note: Note.Re, octave: 1 });
-      expect(result[0].tokens[2].standardized).toEqual({ note: Note.Ga, octave: 1 });
+      expect(result[0].tokens[0].standardized).toEqual({ note: Note.Sa, octave: 2 });
+      expect(result[0].tokens[1].standardized).toEqual({ note: Note.Re, octave: 2 });
+      expect(result[0].tokens[2].standardized).toEqual({ note: Note.Ga, octave: 2 });
     }
   });
 

@@ -20,33 +20,33 @@ interface NoteMapping {
  */
 const NOTE_MAPPING: Record<string, NoteMapping> = {
   // LOW OCTAVE (lowercase p, d, n)
-  'p': { note: Note.Pa, octave: -1 },
-  'd': { note: Note.Dha, octave: -1 },
-  'n': { note: Note.Ni, octave: -1 },
+  'p': { note: Note.Pa, octave: 0 },
+  'd': { note: Note.Dha, octave: 0 },
+  'n': { note: Note.Ni, octave: 0 },
   
   // MIDDLE OCTAVE - Shudh (natural) notes
-  'S': { note: Note.Sa, octave: 0 },
-  'R': { note: Note.Re, octave: 0 },
-  'G': { note: Note.Ga, octave: 0 },
-  'm': { note: Note.Ma, octave: 0 },        // Shudh Ma
-  'M': { note: Note.Ma_Tivra, octave: 0 },  // Tivra Ma
-  'P': { note: Note.Pa, octave: 0 },
-  'D': { note: Note.Dha, octave: 0 },
-  'N': { note: Note.Ni, octave: 0 },
+  'S': { note: Note.Sa, octave: 1 },
+  'R': { note: Note.Re, octave: 1 },
+  'G': { note: Note.Ga, octave: 1 },
+  'm': { note: Note.Ma, octave: 1 },        // Shudh Ma
+  'M': { note: Note.Ma_Tivra, octave: 1 },  // Tivra Ma
+  'P': { note: Note.Pa, octave: 1 },
+  'D': { note: Note.Dha, octave: 1 },
+  'N': { note: Note.Ni, octave: 1 },
   
   // KOMAL notes - (k) suffix
-  'D(k)': { note: Note.Dha_Komal, octave: 0 },
-  'N(k)': { note: Note.Ni_Komal, octave: 0 },
-  'R(k)': { note: Note.Re_Komal, octave: 0 },
-  'G(k)': { note: Note.Ga_Komal, octave: 0 },
+  'D(k)': { note: Note.Dha_Komal, octave: 1 },
+  'N(k)': { note: Note.Ni_Komal, octave: 1 },
+  'R(k)': { note: Note.Re_Komal, octave: 1 },
+  'G(k)': { note: Note.Ga_Komal, octave: 1 },
   
   // UPPER OCTAVE - ' suffix
-  "S'": { note: Note.Sa, octave: 1 },
-  "R'": { note: Note.Re, octave: 1 },
-  "G'": { note: Note.Ga, octave: 1 },
-  "m'": { note: Note.Ma, octave: 1 },
-  "M'": { note: Note.Ma_Tivra, octave: 1 },
-  "P'": { note: Note.Pa, octave: 1 },
+  "S'": { note: Note.Sa, octave: 2 },
+  "R'": { note: Note.Re, octave: 2 },
+  "G'": { note: Note.Ga, octave: 2 },
+  "m'": { note: Note.Ma, octave: 2 },
+  "M'": { note: Note.Ma_Tivra, octave: 2 },
+  "P'": { note: Note.Pa, octave: 2 },
 };
 
 // ============================================================

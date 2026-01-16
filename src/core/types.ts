@@ -18,7 +18,7 @@ export enum Note {
   Ni = 11,
 }
 
-export type Octave = -1 | 0 | 1; // -1=low, 0=middle, 1=upper
+export type Octave = 0 | 1 | 2; // 0=low, 1=middle, 2=upper
 
 export interface StandardizedNote {
   note: Note;

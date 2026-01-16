@@ -7,17 +7,17 @@ import { Note, type Octave, type StandardizedNote, type ValidationError, NOTE_NA
  */
 export const BANSURI_RANGE: Record<Octave, Set<Note>> = {
   // Low octave: only Pa, Dha, Dha_Komal, Ni, Ni_Komal
-  [-1]: new Set([Note.Pa, Note.Dha, Note.Dha_Komal, Note.Ni, Note.Ni_Komal]),
+  [0]: new Set([Note.Pa, Note.Dha, Note.Dha_Komal, Note.Ni, Note.Ni_Komal]),
   
   // Middle octave: all notes allowed
-  [0]: new Set([
+  [1]: new Set([
     Note.Sa, Note.Re_Komal, Note.Re, Note.Ga_Komal, Note.Ga,
     Note.Ma, Note.Ma_Tivra, Note.Pa, Note.Dha_Komal, Note.Dha,
     Note.Ni_Komal, Note.Ni,
   ]),
   
   // Upper octave: Sa, Re, Ga, Ma, Ma_Tivra, Pa
-  [1]: new Set([Note.Sa, Note.Re, Note.Ga, Note.Ma, Note.Ma_Tivra, Note.Pa]),
+  [2]: new Set([Note.Sa, Note.Re, Note.Ga, Note.Ma, Note.Ma_Tivra, Note.Pa]),
 };
 
 /**
@@ -31,7 +31,7 @@ export function validateNote(
   const allowedNotes = BANSURI_RANGE[note.octave];
   
   if (!allowedNotes.has(note.note)) {
-    const octaveLabel = note.octave === -1 ? 'low' : note.octave === 1 ? 'upper' : 'middle';
+    const octaveLabel = note.octave === 0 ? 'low' : note.octave === 2 ? 'upper' : 'middle';
     return {
       lineNumber,
       originalToken,
