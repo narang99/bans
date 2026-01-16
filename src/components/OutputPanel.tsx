@@ -1,13 +1,12 @@
-import { type ValidationError } from '../core';
-import { type ParsedLine } from '../parsers';
+import { type TransposedLine } from '../core';
 
 interface OutputPanelProps {
   output: string;
-  parsedLines: ParsedLine[];
-  errors: ValidationError[];
+  transposedLines: TransposedLine[];
+  errors: Array<{ lineNumber: number; originalToken: string; reason: string }>;
 }
 
-export function OutputPanel({ output, parsedLines, errors }: OutputPanelProps) {
+export function OutputPanel({ output, transposedLines, errors }: OutputPanelProps) {
   const outputLines = output.split('\n');
   
   // Build a map of line numbers with errors
@@ -29,7 +28,7 @@ export function OutputPanel({ output, parsedLines, errors }: OutputPanelProps) {
             <>
               {outputLines.map((line, idx) => {
                 const lineNum = idx + 1;
-                const isNotation = parsedLines[idx]?.type === 'notation';
+                const isNotation = transposedLines[idx]?.type === 'notation';
                 const hasError = errorLineNumbers.has(lineNum);
                 
                 return (

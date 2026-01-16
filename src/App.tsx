@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { InputPanel, OutputPanel, TransposeControls } from './components';
-import { genericDotsParser, type ParsedLine, type NotationLine } from './parsers';
-import { transposeNotes, validateNotes, type ValidationError, type StandardizedNote } from './core';
+import { genericDotsParser } from './parsers';
+import { transposeAndValidate, extractErrors, type TransposedLine } from './core';
 import './index.css';
 
 function App() {
@@ -9,42 +9,30 @@ function App() {
   const [transposeAmount, setTransposeAmount] = useState(0);
 
   // Process the input text through the parser and transposer
-  const { output, parsedLines, errors } = useMemo(() => {
+  const { output, transposedLines, errors } = useMemo(() => {
     if (!inputText.trim()) {
-      return { output: '', parsedLines: [] as ParsedLine[], errors: [] as ValidationError[] };
+      return { 
+        output: '', 
+        transposedLines: [] as TransposedLine[],
+        errors: [] as Array<{ lineNumber: number; originalToken: string; reason: string }>,
+      };
     }
 
     // Parse the input
     const parsed = genericDotsParser.parse(inputText);
 
-    // Extract all notes with their line numbers and original tokens
-    const allNotes: StandardizedNote[] = [];
-    const allLineNumbers: number[] = [];
-    const allOriginalTokens: string[] = [];
+    // Transpose and validate in one pass (maintains line structure)
+    const transposed = transposeAndValidate(parsed, transposeAmount);
 
-    for (const line of parsed) {
-      if (line.type === 'notation') {
-        const notationLine = line as NotationLine;
-        for (const token of notationLine.tokens) {
-          allNotes.push(token.standardized);
-          allLineNumbers.push(token.lineNumber);
-          allOriginalTokens.push(token.original);
-        }
-      }
-    }
+    // Extract errors from transposed tokens
+    const validationErrors = extractErrors(transposed);
 
-    // Transpose notes
-    const transposed = transposeNotes(allNotes, transposeAmount);
-
-    // Validate transposed notes
-    const validationErrors = validateNotes(transposed, allLineNumbers, allOriginalTokens);
-
-    // Reconstruct output
-    const outputText = genericDotsParser.reconstruct(parsed, transposed);
+    // Reconstruct output from transposed lines
+    const outputText = genericDotsParser.reconstruct(transposed);
 
     return {
       output: outputText,
-      parsedLines: parsed,
+      transposedLines: transposed,
       errors: validationErrors,
     };
   }, [inputText, transposeAmount]);
@@ -60,7 +48,7 @@ function App() {
 
       <div className="split-container">
         <InputPanel value={inputText} onChange={setInputText} />
-        <OutputPanel output={output} parsedLines={parsedLines} errors={errors} />
+        <OutputPanel output={output} transposedLines={transposedLines} errors={errors} />
       </div>
     </div>
   );

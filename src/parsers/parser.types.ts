@@ -1,4 +1,5 @@
 import { type StandardizedNote } from '../core/types';
+import { type TransposedLine } from '../core/transposedTypes';
 
 /**
  * Parser interface for different notation formats.
@@ -8,7 +9,7 @@ export interface Parser {
   name: string;
   canParse(text: string): boolean;
   parse(text: string): ParsedLine[];
-  reconstruct(lines: ParsedLine[], transposedNotes: StandardizedNote[]): string;
+  reconstruct(transposedLines: TransposedLine[]): string;
 }
 
 // Discriminated union for ParsedLine

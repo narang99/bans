@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { genericDotsParser } from './genericDotsParser';
 import { Note } from '../core/types';
+import { transposeAndValidate } from '../core/transposeAndValidate';
 
 describe('genericDotsParser.canParse', () => {
   it('should return true for text with notation', () => {
@@ -108,39 +109,33 @@ S..G..M..`;
 describe('genericDotsParser.reconstruct', () => {
   it('should reconstruct with transposed notes', () => {
     const parsed = genericDotsParser.parse('S..G..P..');
-    // Transposed notes: R, Ma, Dha (each up by 2)
-    const transposed = [
-      { note: Note.Re, octave: 0 as const },
-      { note: Note.Ma, octave: 0 as const },
-      { note: Note.Dha, octave: 0 as const },
-    ];
-    const result = genericDotsParser.reconstruct(parsed, transposed);
-    expect(result).toBe('R m D');
+    // Transpose up by 2 semitones
+    const transposed = transposeAndValidate(parsed, 2);
+    const result = genericDotsParser.reconstruct(transposed);
+    // S(0)+2=Re(2), G(4)+2=Ma_Tivra(6), P(7)+2=Dha(9)
+    expect(result).toBe('R M D');
   });
 
   it('should preserve lyrics lines', () => {
     const text = `Hello
 S..G..`;
     const parsed = genericDotsParser.parse(text);
-    const transposed = [
-      { note: Note.Re, octave: 0 as const },
-      { note: Note.Ma, octave: 0 as const },
-    ];
-    const result = genericDotsParser.reconstruct(parsed, transposed);
+    const transposed = transposeAndValidate(parsed, 2);
+    const result = genericDotsParser.reconstruct(transposed);
     expect(result).toContain('Hello');
   });
 
   it('should output upper octave with apostrophe', () => {
     const parsed = genericDotsParser.parse('S..');
-    const transposed = [{ note: Note.Sa, octave: 1 as const }];
-    const result = genericDotsParser.reconstruct(parsed, transposed);
+    const transposed = transposeAndValidate(parsed, 12); // +1 octave
+    const result = genericDotsParser.reconstruct(transposed);
     expect(result).toBe("S'");
   });
 
   it('should output low octave with lowercase', () => {
     const parsed = genericDotsParser.parse('S..');
-    const transposed = [{ note: Note.Pa, octave: -1 as const }];
-    const result = genericDotsParser.reconstruct(parsed, transposed);
+    const transposed = transposeAndValidate(parsed, -5); // Down to Pa in low octave
+    const result = genericDotsParser.reconstruct(transposed);
     expect(result).toBe('p');
   });
 });

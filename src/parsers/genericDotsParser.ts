@@ -1,5 +1,6 @@
 import { Note, type Octave, type StandardizedNote, NOTE_NAMES } from '../core/types';
-import { type Parser, type ParsedLine, type ParsedToken, type NotationLine } from './parser.types';
+import { type TransposedLine } from '../core/transposedTypes';
+import { type Parser, type ParsedLine, type ParsedToken } from './parser.types';
 
 // ============================================================
 // TOKEN MAPPING - EDIT THESE TO CHANGE HOW NOTES ARE RECOGNIZED
@@ -220,23 +221,18 @@ export const genericDotsParser: Parser = {
     return result;
   },
   
-  reconstruct(lines: ParsedLine[], transposedNotes: StandardizedNote[]): string {
-    let noteIndex = 0;
+  reconstruct(transposedLines: TransposedLine[]): string {
     const result: string[] = [];
     
-    for (const line of lines) {
+    for (const line of transposedLines) {
       if (line.type === 'lyrics') {
         result.push(line.original);
       } else {
         // Reconstruct notation line with transposed notes
-        const notationLine = line as NotationLine;
         const newTokens: string[] = [];
         
-        for (const _token of notationLine.tokens) {
-          if (noteIndex < transposedNotes.length) {
-            newTokens.push(noteToToken(transposedNotes[noteIndex]));
-            noteIndex++;
-          }
+        for (const token of line.tokens) {
+          newTokens.push(noteToToken(token.transposedNote));
         }
         
         // Join with spaces (normalized format)
