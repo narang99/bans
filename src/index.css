@@ -2,12 +2,20 @@
 
 :root {
   /* Gruvbox Light Palette */
-  --bg: #fbf1c7;
+  --bg: #f2e5bc;
   --bg1: #ebdbb2;
   --bg2: #d5c4a1;
   --bg3: #bdae93;
   --bg4: #a89984;
+  --bg5: #928374;
+
+  /* --bg: #fbf1c7;
+  --bg1: #ebdbb2;
+  --bg2: #d5c4a1;
+  --bg3: #bdae93;
+  --bg4: #a89984; */
   
+
   --fg: #3c3836;
   --fg1: #504945;
   --fg2: #665c54;
