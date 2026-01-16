@@ -15,8 +15,7 @@ export function transposeNote(
 
   // Calculate new octave and note
   const newOctave = Math.floor(totalPosition / NOTES_IN_OCTAVE) as Octave;
-  const newNote = ((totalPosition % NOTES_IN_OCTAVE) + NOTES_IN_OCTAVE) % NOTES_IN_OCTAVE;
-  console.log(`total: ${totalPosition} newOctave: ${newOctave} newNote: ${newNote}`);
+  const newNote = totalPosition % NOTES_IN_OCTAVE;
 
   return {
     note: newNote as Note,
