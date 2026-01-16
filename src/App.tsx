@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { InputPanel, OutputPanel, TransposeControls } from './components';
 import { genericDotsParser } from './parsers';
-import { transposeAndValidate, extractErrors, type TransposedLine } from './core';
+import { transposeAndValidate, extractErrors, sanitizeInput, type TransposedLine } from './core';
 import './index.css';
 
 function App() {
@@ -17,8 +17,11 @@ function App() {
       };
     }
 
+    // Sanitize input (handle curly quotes etc)
+    const sanitized = sanitizeInput(inputText);
+
     // Parse the input
-    const parsed = genericDotsParser.parse(inputText);
+    const parsed = genericDotsParser.parse(sanitized);
 
     // Transpose and validate in one pass (maintains line structure)
     const transposed = transposeAndValidate(parsed, transposeAmount);

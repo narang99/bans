@@ -8,16 +8,18 @@ import { Note, type Octave, type StandardizedNote, type ValidationError, NOTE_NA
 export const BANSURI_RANGE: Record<Octave, Set<Note>> = {
   // Low octave: only Pa, Dha, Dha_Komal, Ni, Ni_Komal
   [0]: new Set([Note.Pa, Note.Dha, Note.Dha_Komal, Note.Ni, Note.Ni_Komal]),
-  
+
   // Middle octave: all notes allowed
   [1]: new Set([
     Note.Sa, Note.Re_Komal, Note.Re, Note.Ga_Komal, Note.Ga,
     Note.Ma, Note.Ma_Tivra, Note.Pa, Note.Dha_Komal, Note.Dha,
     Note.Ni_Komal, Note.Ni,
   ]),
-  
   // Upper octave: Sa, Re, Ga, Ma, Ma_Tivra, Pa
-  [2]: new Set([Note.Sa, Note.Re, Note.Ga, Note.Ma, Note.Ma_Tivra, Note.Pa]),
+  [2]: new Set([
+    Note.Sa, Note.Re_Komal, Note.Re, Note.Ga_Komal, Note.Ga,
+    Note.Ma, Note.Ma_Tivra, Note.Pa
+  ])
 };
 
 /**
@@ -29,17 +31,47 @@ export function validateNote(
   originalToken: string
 ): ValidationError | null {
   const allowedNotes = BANSURI_RANGE[note.octave];
-  
-  if (!allowedNotes.has(note.note)) {
-    const octaveLabel = note.octave === 0 ? 'low' : note.octave === 2 ? 'upper' : 'middle';
+
+  // If octave is completely out of range
+  if (note.octave < 0) {
     return {
       lineNumber,
       originalToken,
       transposedNote: note,
-      reason: `Note ${NOTE_NAMES[note.note]} not available in ${octaveLabel} octave on bansuri`,
+      reason: `Note is farther from the lowest note (p) available on bansuri`,
     };
   }
-  
+
+  if (note.octave > 2) {
+    return {
+      lineNumber,
+      originalToken,
+      transposedNote: note,
+      reason: `Note is farther from the highest note (Pa') available on bansuri`,
+    };
+  }
+
+  // If octave is 0, 1, or 2 but note is not available
+  if (!allowedNotes.has(note.note)) {
+    let reason = '';
+    if (note.octave === 0) {
+      reason = `Note is farther from the lowest note (p) available on bansuri`;
+    } else if (note.octave === 2) {
+      reason = `Note is farther from the highest note (Pa') available on bansuri`;
+    } else {
+      // This case should theoretically not happen for middle octave [1] as it has all notes,
+      // but keeping it for completeness.
+      reason = `Note ${NOTE_NAMES[note.note]} not available in middle octave on bansuri`;
+    }
+
+    return {
+      lineNumber,
+      originalToken,
+      transposedNote: note,
+      reason,
+    };
+  }
+
   return null;
 }
 
@@ -53,13 +85,13 @@ export function validateNotes(
   originalTokens: string[]
 ): ValidationError[] {
   const errors: ValidationError[] = [];
-  
+
   for (let i = 0; i < notes.length; i++) {
     const error = validateNote(notes[i], lineNumbers[i], originalTokens[i]);
     if (error) {
       errors.push(error);
     }
   }
-  
+
   return errors;
 }

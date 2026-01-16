@@ -61,7 +61,7 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
   // Build the JSX element with appropriate styling
   let content: React.JSX.Element;
   
-  if (octave === 0) {
+  if (octave <= 0) {
     // Low octave - underline
     content = (
       <span style={{ textDecoration: 'underline' }}>
@@ -69,7 +69,7 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
         {isKomal && <sub style={{ fontSize: '0.7em' }}>K</sub>}
       </span>
     );
-  } else if (octave === 2) {
+  } else if (octave >= 2) {
     // Upper octave - overline
     content = (
       <span style={{ textDecoration: 'overline' }}>

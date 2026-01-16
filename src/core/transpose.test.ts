@@ -28,16 +28,16 @@ describe('transposeNote', () => {
     expect(result).toEqual({ note: Note.Ni, octave: 0 });
   });
 
-  it('should handle multiple octave jumps and clamp to max octave', () => {
-    // From middle octave Sa, up 24 semitones (2 octaves) - should clamp to octave 2
+  it('should handle multiple octave jumps and NOT clamp to max octave', () => {
+    // From middle octave Sa, up 24 semitones (2 octaves) - should be octave 3
     const result = transposeNote({ note: Note.Sa, octave: 1 }, 24);
-    expect(result.octave).toBe(2);
+    expect(result.octave).toBe(3);
   });
 
-  it('should handle multiple octave jumps and clamp to min octave', () => {
-    // From middle octave Sa, down 24 semitones (2 octaves) - should clamp to octave 0
+  it('should handle multiple octave jumps and NOT clamp to min octave', () => {
+    // From middle octave Sa, down 24 semitones (2 octaves) - should be octave -1
     const result = transposeNote({ note: Note.Sa, octave: 1 }, -24);
-    expect(result.octave).toBe(0);
+    expect(result.octave).toBe(-1);
   });
 
   it('should transpose from low octave to middle', () => {
@@ -54,9 +54,9 @@ describe('transposeNote', () => {
 describe('transposeNotes', () => {
   it('should transpose array of notes', () => {
     const notes = [
-      { note: Note.Sa, octave: 1 as const },
-      { note: Note.Ga, octave: 1 as const },
-      { note: Note.Pa, octave: 1 as const },
+      { note: Note.Sa, octave: 1 },
+      { note: Note.Ga, octave: 1 },
+      { note: Note.Pa, octave: 1 },
     ];
     const result = transposeNotes(notes, 2);
     // Sa(0)+2=Re(2), Ga(4)+2=Ma_Tivra(6), Pa(7)+2=Dha(9)

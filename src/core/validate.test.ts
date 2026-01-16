@@ -37,14 +37,26 @@ describe('validateNote', () => {
   it('should return error for invalid low octave note (Sa)', () => {
     const result = validateNote({ note: Note.Sa, octave: 0 }, 1, 'S');
     expect(result).not.toBeNull();
-    expect(result?.reason).toContain('not available in low octave');
+    expect(result?.reason).toContain('farther from the lowest note (p)');
   });
 
   it('should return error for invalid upper octave note (Dha)', () => {
     const result = validateNote({ note: Note.Dha, octave: 2 }, 5, 'D');
     expect(result).not.toBeNull();
-    expect(result?.reason).toContain('not available in upper octave');
+    expect(result?.reason).toContain('farther from the highest note (Pa\')');
     expect(result?.lineNumber).toBe(5);
+  });
+
+  it('should return error for octave too high (> 2)', () => {
+    const result = validateNote({ note: Note.Sa, octave: 3 }, 1, "S''");
+    expect(result).not.toBeNull();
+    expect(result?.reason).toContain('farther from the highest note (Pa\')');
+  });
+
+  it('should return error for octave too low (< 0)', () => {
+    const result = validateNote({ note: Note.Ni, octave: -1 }, 1, 'n_low');
+    expect(result).not.toBeNull();
+    expect(result?.reason).toContain('farther from the lowest note (p)');
   });
 
   it('should include original token in error', () => {
@@ -56,8 +68,8 @@ describe('validateNote', () => {
 describe('validateNotes', () => {
   it('should return empty array for all valid notes', () => {
     const notes = [
-      { note: Note.Sa, octave: 1 as const },
-      { note: Note.Pa, octave: 1 as const },
+      { note: Note.Sa, octave: 1 },
+      { note: Note.Pa, octave: 1 },
     ];
     const result = validateNotes(notes, [1, 1], ['S', 'P']);
     expect(result).toEqual([]);
@@ -65,8 +77,8 @@ describe('validateNotes', () => {
 
   it('should return errors for invalid notes', () => {
     const notes = [
-      { note: Note.Sa, octave: 1 as const },  // valid
-      { note: Note.Dha, octave: 2 as const }, // invalid - Dha not in upper octave
+      { note: Note.Sa, octave: 1 },  // valid
+      { note: Note.Dha, octave: 2 }, // invalid - Dha not in upper octave
     ];
     const result = validateNotes(notes, [1, 2], ['S', "D'"]);
     expect(result.length).toBe(1);

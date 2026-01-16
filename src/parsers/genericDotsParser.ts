@@ -21,28 +21,31 @@ interface NoteMapping {
 const NOTE_MAPPING: Record<string, NoteMapping> = {
   // LOW OCTAVE (lowercase p, d, n)
   'p': { note: Note.Pa, octave: 0 },
+  'd(k)': { note: Note.Dha_Komal, octave: 0 },
   'd': { note: Note.Dha, octave: 0 },
+  'n(k)': { note: Note.Ni_Komal, octave: 0 },
   'n': { note: Note.Ni, octave: 0 },
   
+
   // MIDDLE OCTAVE - Shudh (natural) notes
   'S': { note: Note.Sa, octave: 1 },
+  'R(k)': { note: Note.Re_Komal, octave: 1 },
   'R': { note: Note.Re, octave: 1 },
+  'G(k)': { note: Note.Ga_Komal, octave: 1 },
   'G': { note: Note.Ga, octave: 1 },
   'm': { note: Note.Ma, octave: 1 },        // Shudh Ma
   'M': { note: Note.Ma_Tivra, octave: 1 },  // Tivra Ma
   'P': { note: Note.Pa, octave: 1 },
-  'D': { note: Note.Dha, octave: 1 },
-  'N': { note: Note.Ni, octave: 1 },
-  
-  // KOMAL notes - (k) suffix
   'D(k)': { note: Note.Dha_Komal, octave: 1 },
+  'D': { note: Note.Dha, octave: 1 },
   'N(k)': { note: Note.Ni_Komal, octave: 1 },
-  'R(k)': { note: Note.Re_Komal, octave: 1 },
-  'G(k)': { note: Note.Ga_Komal, octave: 1 },
+  'N': { note: Note.Ni, octave: 1 },
   
   // UPPER OCTAVE - ' suffix
   "S'": { note: Note.Sa, octave: 2 },
+  "R'(k)": { note: Note.Re_Komal, octave: 2 },
   "R'": { note: Note.Re, octave: 2 },
+  "G'(k)": { note: Note.Ga_Komal, octave: 2 },
   "G'": { note: Note.Ga, octave: 2 },
   "m'": { note: Note.Ma, octave: 2 },
   "M'": { note: Note.Ma_Tivra, octave: 2 },
@@ -52,10 +55,6 @@ const NOTE_MAPPING: Record<string, NoteMapping> = {
 // ============================================================
 // PARSER LOGIC
 // ============================================================
-
-// Regex to detect notation lines (contains note letters with dots/spaces)
-// const NOTE_CHARS_PATTERN = /[SRGMPDNsrgmpdnS'R'G'M'P']/;
-// const DOTS_PATTERN = /\.{2,}/g;
 
 /**
  * Check if a line looks like notation.
