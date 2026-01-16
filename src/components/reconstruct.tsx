@@ -14,7 +14,6 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
   
   // Determine base note name
   let baseName = '';
-  let isKomal = false;
   
   switch (note) {
     case Note.Sa:
@@ -22,39 +21,33 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
       break;
     case Note.Re_Komal:
       baseName = 'r';
-      isKomal = true;
       break;
     case Note.Re:
       baseName = 'R';
       break;
     case Note.Ga_Komal:
       baseName = 'g';
-      isKomal = true;
       break;
     case Note.Ga:
       baseName = 'G';
       break;
     case Note.Ma:
       baseName = 'm';
-      isKomal = true;
       break;
     case Note.Ma_Tivra:
       baseName = 'M';
-      // isKomal = true;
       break;
     case Note.Pa:
       baseName = 'P';
       break;
     case Note.Dha_Komal:
       baseName = 'd';
-      isKomal = true;
       break;
     case Note.Dha:
       baseName = 'D';
       break;
     case Note.Ni_Komal:
       baseName = 'n';
-      isKomal = true;
       break;
     case Note.Ni:
       baseName = 'N';
