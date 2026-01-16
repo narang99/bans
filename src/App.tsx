@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { InputPanel, OutputPanel, TransposeControls, Navbar, SongList, SongPage } from './components';
+import { InputPanel, OutputPanel, TransposeControls, Navbar, SongList, SongPage, NotationModal } from './components';
 import { genericDotsParser } from './parsers';
 import { transposeAndValidate, extractErrors, sanitizeInput, type TransposedLine } from './core';
 import './index.css';
@@ -9,6 +9,7 @@ function App() {
   const [selectedSong, setSelectedSong] = useState<string | null>(null);
   const [inputText, setInputText] = useState('');
   const [transposeAmount, setTransposeAmount] = useState(0);
+  // const [isNotationModalOpen, setIsNotationModalOpen] = useState(false);
 
   // Handle URL changes
   useEffect(() => {
@@ -85,13 +86,13 @@ function App() {
     }
 
     return (
-      <>
+      <div className="transpose-page">
         <TransposeControls value={transposeAmount} onChange={setTransposeAmount} />
         <div className="split-container">
           <InputPanel value={inputText} onChange={setInputText} />
           <OutputPanel transposedLines={transposedLines} errors={errors} />
         </div>
-      </>
+      </div>
     );
   };
 
@@ -100,6 +101,7 @@ function App() {
       <Navbar currentPage={currentPage === 'song' ? 'songs' : currentPage} onNavigate={handleNavigate} />
 
       {renderContent()}
+
     </div>
   );
 }
