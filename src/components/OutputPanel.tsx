@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { type TransposedLine } from '../core';
+import { CopyButton } from './CopyButton';
 import { reconstructLines } from './reconstruct';
 
 interface OutputPanelProps {
@@ -12,6 +14,9 @@ export function OutputPanel({ transposedLines, errors }: OutputPanelProps) {
   
   // Reconstruct lines as JSX
   const reconstructedLines = reconstructLines(transposedLines);
+
+  const outputRef = useRef(null);
+
   
   return (
     <div className="panel">
@@ -22,8 +27,9 @@ export function OutputPanel({ transposedLines, errors }: OutputPanelProps) {
             ⚠ {errors.length} issue{errors.length > 1 ? 's' : ''}
           </span>
         )}
+        <CopyButton targetRef={outputRef} />
       </div>
-      <div className="panel-content">
+      <div className="panel-content" ref={outputRef}>
         <div className="output-display">
           {transposedLines.length > 0 ? (
             <>

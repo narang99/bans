@@ -30,7 +30,7 @@ export function TransposeControls({ value, onChange }: TransposeControlsProps) {
         </button>
       </div>
       
-        <button className="reset-btn" onClick={handleReset}>
+        <button className="std-btn" onClick={handleReset}>
           Reset
         </button>
     </div>

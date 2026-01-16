@@ -6,6 +6,9 @@ import { type TransposedLine, type TransposedToken, Note } from '../core';
  * - Overline for upper octave
  * - Subscript K for komal notes
  */
+
+const FAT_DOT = "•";
+
 export function reconstructToken(token: TransposedToken): React.JSX.Element {
   const { note, octave } = token.transposedNote;
   
@@ -18,37 +21,39 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
       baseName = 'S';
       break;
     case Note.Re_Komal:
-      baseName = 'R';
+      baseName = 'r';
       isKomal = true;
       break;
     case Note.Re:
       baseName = 'R';
       break;
     case Note.Ga_Komal:
-      baseName = 'G';
+      baseName = 'g';
       isKomal = true;
       break;
     case Note.Ga:
       baseName = 'G';
       break;
     case Note.Ma:
-      baseName = 'M';
+      baseName = 'm';
+      isKomal = true;
       break;
     case Note.Ma_Tivra:
-      baseName = 'M#';
+      baseName = 'M';
+      // isKomal = true;
       break;
     case Note.Pa:
       baseName = 'P';
       break;
     case Note.Dha_Komal:
-      baseName = 'D';
+      baseName = 'd';
       isKomal = true;
       break;
     case Note.Dha:
       baseName = 'D';
       break;
     case Note.Ni_Komal:
-      baseName = 'N';
+      baseName = 'n';
       isKomal = true;
       break;
     case Note.Ni:
@@ -64,17 +69,15 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
   if (octave <= 0) {
     // Low octave - underline
     content = (
-      <span style={{ textDecoration: 'underline' }}>
-        {baseName}
-        {isKomal && <sub style={{ fontSize: '0.7em' }}>K</sub>}
+      <span>
+        {FAT_DOT}{baseName}
       </span>
     );
   } else if (octave >= 2) {
     // Upper octave - overline
     content = (
-      <span style={{ textDecoration: 'overline' }}>
-        {baseName}
-        {isKomal && <sub style={{ fontSize: '0.7em' }}>K</sub>}
+      <span>
+        {baseName}{FAT_DOT}
       </span>
     );
   } else {
@@ -82,7 +85,6 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
     content = (
       <span>
         {baseName}
-        {isKomal && <sub style={{ fontSize: '0.7em' }}>K</sub>}
       </span>
     );
   }
