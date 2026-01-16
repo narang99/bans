@@ -32,10 +32,10 @@ export function reconstructToken(token: TransposedToken): React.JSX.Element {
       baseName = 'G';
       break;
     case Note.Ma:
-      baseName = 'm';
+      baseName = 'M';
       break;
     case Note.Ma_Tivra:
-      baseName = 'M';
+      baseName = 'M#';
       break;
     case Note.Pa:
       baseName = 'P';
