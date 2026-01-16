@@ -6,9 +6,10 @@ import { reconstructLines } from './reconstruct';
 interface OutputPanelProps {
   transposedLines: TransposedLine[];
   errors: Array<{ lineNumber: number; originalToken: string; reason: string }>;
+  centered?: boolean;
 }
 
-export function OutputPanel({ transposedLines, errors }: OutputPanelProps) {
+export function OutputPanel({ transposedLines, errors, centered = false }: OutputPanelProps) {
   // Build a map of line numbers with errors
   const errorLineNumbers = new Set(errors.map(e => e.lineNumber));
   
@@ -30,7 +31,7 @@ export function OutputPanel({ transposedLines, errors }: OutputPanelProps) {
         <CopyButton targetRef={outputRef} />
       </div>
       <div className="panel-content" ref={outputRef}>
-        <div className="output-display">
+        <div className={`output-display ${centered ? 'centered' : ''}`}>
           {transposedLines.length > 0 ? (
             <>
               {reconstructedLines.map((lineContent, idx) => {

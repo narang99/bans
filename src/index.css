@@ -49,7 +49,139 @@
   
   /* Borders */
   --border-radius: 8px;
-  --border-radius-lg: 12px;
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--bg3);
+  background: var(--bg1);
+}
+
+.navbar-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.nav-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg1);
+  border: 1px solid var(--bg3);
+  border-radius: var(--border-radius);
+  color: var(--fg);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background: var(--bg2);
+}
+
+.nav-button.active {
+  background: var(--blue);
+  color: var(--bg);
+  border-color: var(--blue-dim);
+}
+
+/* Song List Styles */
+.song-list {
+  padding: var(--spacing-lg);
+}
+
+.song-list h2 {
+  color: var(--fg);
+  margin-bottom: var(--spacing-lg);
+  font-family: var(--font-sans);
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.song-card {
+  background: var(--bg1);
+  border: 1px solid var(--bg3);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.song-card:hover {
+  background: var(--bg2);
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.song-card h3 {
+  color: var(--fg);
+  margin: 0 0 var(--spacing-sm) 0;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+}
+
+.song-card p {
+  color: var(--fg2);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Song Page Styles */
+.song-page {
+  padding: var(--spacing-lg);
+}
+
+.song-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.back-button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg1);
+  border: 1px solid var(--bg3);
+  border-radius: var(--border-radius);
+  color: var(--fg);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: var(--bg2);
+}
+
+.song-header h2 {
+  color: var(--fg);
+  margin: 0;
+  font-family: var(--font-sans);
+}
+
+.song-content {
+  margin-top: var(--spacing-lg);
+}
+
+/* Centered output display for songs */
+.output-display.centered {
+  text-align: center;
 }
 
 * {

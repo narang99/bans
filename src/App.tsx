@@ -1,12 +1,52 @@
-import { useState, useMemo } from 'react';
-import { InputPanel, OutputPanel, TransposeControls } from './components';
+import { useState, useMemo, useEffect } from 'react';
+import { InputPanel, OutputPanel, TransposeControls, Navbar, SongList, SongPage } from './components';
 import { genericDotsParser } from './parsers';
 import { transposeAndValidate, extractErrors, sanitizeInput, type TransposedLine } from './core';
 import './index.css';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState('songs');
+  const [selectedSong, setSelectedSong] = useState<string | null>(null);
   const [inputText, setInputText] = useState('');
   const [transposeAmount, setTransposeAmount] = useState(0);
+
+  // Handle URL changes
+  useEffect(() => {
+    const updatePageFromURL = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash === 'transcode') {
+        setCurrentPage('transcode');
+        setSelectedSong(null);
+      } else if (hash.startsWith('song/')) {
+        const songId = hash.split('song/')[1];
+        setCurrentPage('song');
+        setSelectedSong(songId);
+      } else {
+        setCurrentPage('songs');
+        setSelectedSong(null);
+      }
+    };
+
+    updatePageFromURL();
+    window.addEventListener('hashchange', updatePageFromURL);
+    return () => window.removeEventListener('hashchange', updatePageFromURL);
+  }, []);
+
+  const handleNavigate = (page: string) => {
+    if (page === 'transcode') {
+      window.location.hash = 'transcode';
+    } else {
+      window.location.hash = '';
+    }
+  };
+
+  const handleSongSelect = (songId: string) => {
+    window.location.hash = `song/${songId}`;
+  };
+
+  const handleBackToSongs = () => {
+    window.location.hash = 'songs';
+  };
 
   // Process the input text through the parser and transposer
   const { transposedLines, errors } = useMemo(() => {
@@ -35,19 +75,31 @@ function App() {
     };
   }, [inputText, transposeAmount]);
 
+  const renderContent = () => {
+    if (currentPage === 'songs') {
+      return <SongList onSongSelect={handleSongSelect} />;
+    }
+    
+    if (currentPage === 'song' && selectedSong) {
+      return <SongPage songId={selectedSong} onBack={handleBackToSongs} />;
+    }
+
+    return (
+      <>
+        <TransposeControls value={transposeAmount} onChange={setTransposeAmount} />
+        <div className="split-container">
+          <InputPanel value={inputText} onChange={setInputText} />
+          <OutputPanel transposedLines={transposedLines} errors={errors} />
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="app">
-      <header className="app-header">
-        <h1 className="app-title">🪈 Sargam Transposer</h1>
-        <p className="app-subtitle">Transpose bansuri notation up or down by semitones</p>
-      </header>
+      <Navbar currentPage={currentPage === 'song' ? 'songs' : currentPage} onNavigate={handleNavigate} />
 
-      <TransposeControls value={transposeAmount} onChange={setTransposeAmount} />
-
-      <div className="split-container">
-        <InputPanel value={inputText} onChange={setInputText} />
-        <OutputPanel transposedLines={transposedLines} errors={errors} />
-      </div>
+      {renderContent()}
     </div>
   );
 }
