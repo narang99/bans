@@ -9,10 +9,9 @@ function App() {
   const [transposeAmount, setTransposeAmount] = useState(0);
 
   // Process the input text through the parser and transposer
-  const { output, transposedLines, errors } = useMemo(() => {
+  const { transposedLines, errors } = useMemo(() => {
     if (!inputText.trim()) {
       return { 
-        output: '', 
         transposedLines: [] as TransposedLine[],
         errors: [] as Array<{ lineNumber: number; originalToken: string; reason: string }>,
       };
@@ -27,11 +26,7 @@ function App() {
     // Extract errors from transposed tokens
     const validationErrors = extractErrors(transposed);
 
-    // Reconstruct output from transposed lines
-    const outputText = genericDotsParser.reconstruct(transposed);
-
     return {
-      output: outputText,
       transposedLines: transposed,
       errors: validationErrors,
     };
@@ -48,7 +43,7 @@ function App() {
 
       <div className="split-container">
         <InputPanel value={inputText} onChange={setInputText} />
-        <OutputPanel output={output} transposedLines={transposedLines} errors={errors} />
+        <OutputPanel transposedLines={transposedLines} errors={errors} />
       </div>
     </div>
   );

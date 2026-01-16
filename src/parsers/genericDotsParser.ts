@@ -1,5 +1,4 @@
-import { Note, type Octave, type StandardizedNote, NOTE_NAMES } from '../core/types';
-import { type TransposedLine } from '../core/transposedTypes';
+import { Note, type Octave } from '../core/types';
 import { type Parser, type ParsedLine, type ParsedToken } from './parser.types';
 
 // ============================================================
@@ -49,60 +48,6 @@ const NOTE_MAPPING: Record<string, NoteMapping> = {
   "M'": { note: Note.Ma_Tivra, octave: 1 },
   "P'": { note: Note.Pa, octave: 1 },
 };
-
-// ============================================================
-// REVERSE MAPPING - FOR RECONSTRUCTION
-// ============================================================
-
-/**
- * Maps standardized notes back to output tokens.
- * Edit this to change output format.
- */
-function noteToToken(note: StandardizedNote): string {
-  const { note: n, octave: o } = note;
-  
-  // Low octave
-  if (o === -1) {
-    switch (n) {
-      case Note.Pa: return 'p';
-      case Note.Dha: return 'd';
-      case Note.Dha_Komal: return 'd(k)'; // Extended for komal
-      case Note.Ni: return 'n';
-      case Note.Ni_Komal: return 'n(k)';
-      default: return `[${NOTE_NAMES[n]}↓]`; // Fallback for invalid
-    }
-  }
-  
-  // Upper octave
-  if (o === 1) {
-    switch (n) {
-      case Note.Sa: return "S'";
-      case Note.Re: return "R'";
-      case Note.Ga: return "G'";
-      case Note.Ma: return "m'";
-      case Note.Ma_Tivra: return "M'";
-      case Note.Pa: return "P'";
-      default: return `[${NOTE_NAMES[n]}↑]`; // Fallback for invalid
-    }
-  }
-  
-  // Middle octave
-  switch (n) {
-    case Note.Sa: return 'S';
-    case Note.Re_Komal: return 'R(k)';
-    case Note.Re: return 'R';
-    case Note.Ga_Komal: return 'G(k)';
-    case Note.Ga: return 'G';
-    case Note.Ma: return 'm';
-    case Note.Ma_Tivra: return 'M';
-    case Note.Pa: return 'P';
-    case Note.Dha_Komal: return 'D(k)';
-    case Note.Dha: return 'D';
-    case Note.Ni_Komal: return 'N(k)';
-    case Note.Ni: return 'N';
-    default: return `[?]`;
-  }
-}
 
 // ============================================================
 // PARSER LOGIC
@@ -219,27 +164,5 @@ export const genericDotsParser: Parser = {
     }
     
     return result;
-  },
-  
-  reconstruct(transposedLines: TransposedLine[]): string {
-    const result: string[] = [];
-    
-    for (const line of transposedLines) {
-      if (line.type === 'lyrics') {
-        result.push(line.original);
-      } else {
-        // Reconstruct notation line with transposed notes
-        const newTokens: string[] = [];
-        
-        for (const token of line.tokens) {
-          newTokens.push(noteToToken(token.transposedNote));
-        }
-        
-        // Join with spaces (normalized format)
-        result.push(newTokens.join(' '));
-      }
-    }
-    
-    return result.join('\n');
   },
 };

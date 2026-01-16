@@ -1,16 +1,17 @@
 import { type TransposedLine } from '../core';
+import { reconstructLines } from './reconstruct';
 
 interface OutputPanelProps {
-  output: string;
   transposedLines: TransposedLine[];
   errors: Array<{ lineNumber: number; originalToken: string; reason: string }>;
 }
 
-export function OutputPanel({ output, transposedLines, errors }: OutputPanelProps) {
-  const outputLines = output.split('\n');
-  
+export function OutputPanel({ transposedLines, errors }: OutputPanelProps) {
   // Build a map of line numbers with errors
   const errorLineNumbers = new Set(errors.map(e => e.lineNumber));
+  
+  // Reconstruct lines as JSX
+  const reconstructedLines = reconstructLines(transposedLines);
   
   return (
     <div className="panel">
@@ -24,9 +25,9 @@ export function OutputPanel({ output, transposedLines, errors }: OutputPanelProp
       </div>
       <div className="panel-content">
         <div className="output-display">
-          {output ? (
+          {transposedLines.length > 0 ? (
             <>
-              {outputLines.map((line, idx) => {
+              {reconstructedLines.map((lineContent, idx) => {
                 const lineNum = idx + 1;
                 const isNotation = transposedLines[idx]?.type === 'notation';
                 const hasError = errorLineNumbers.has(lineNum);
@@ -36,7 +37,7 @@ export function OutputPanel({ output, transposedLines, errors }: OutputPanelProp
                     key={idx}
                     className={`output-line ${isNotation ? 'notation' : 'lyrics'} ${hasError ? 'error' : ''}`}
                   >
-                    {line || '\u00A0'}
+                    {lineContent}
                   </div>
                 );
               })}
